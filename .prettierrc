@@ -9,11 +9,11 @@
         "singleQuote": false
       }
     },
-    { "files": "*.md", "options": { "proseWrap": "always" } }
+    { "files": "*.md", "options": { "proseWrap": "never" } }
   ],
   "goTemplateBracketSpacing": true,
   "bracketSameLine": true,
   "singleQuote": true,
   "htmlWhitespaceSensitivity": "ignore",
-  "printWidth": 120
+  "printWidth": 140
 }

@@ -3,7 +3,7 @@
 .SILENT:
 
 lint:
-	markdownlint '**/*.md'
+	markdownlint '**/*.md' -i node_modules
 @PHONY: lint
 
 dev: lint
