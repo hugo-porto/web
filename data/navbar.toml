@@ -1,5 +1,6 @@
 title = "hugo-porto"
-# logo  = "img/logo.svg"
+logo  = "https://picsum.photos/200"
+logoLink = "http://example.com/"
 
 [[menu]]
   text        = "Home"
@@ -11,6 +12,12 @@ title = "hugo-porto"
   text        = "Posts"
   description = "Read my latest posts"
   link        = "/posts"
+  target      = "_self"
+
+[[menu]]
+  text        = "Tags"
+  description = "Browse tags"
+  link        = "/tags"
   target      = "_self"
 
 [button]
