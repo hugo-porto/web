@@ -7,11 +7,11 @@ lint:
 @PHONY: lint
 
 dev: lint
-	hugo server --buildDrafts --buildFuture --disableFastRender --noHTTPCache  --navigateToChanged --templateMetricsHints --templateMetrics --verbose --watch --port 1313
+	hugo server --buildDrafts --buildFuture --disableFastRender --noHTTPCache  --navigateToChanged --templateMetricsHints --templateMetrics --watch --port 1313
 @PHONY: dev
 
 dev-theme: lint
-	HUGO_MODULE_REPLACEMENTS="github.com/hugo-porto/theme->../../theme" hugo server --buildDrafts --buildFuture --disableFastRender --noHTTPCache  --navigateToChanged --templateMetricsHints --templateMetrics --verbose --watch --port 1313
+	HUGO_MODULE_REPLACEMENTS="github.com/hugo-porto/theme->../../theme" hugo server --buildDrafts --buildFuture --disableFastRender --noHTTPCache  --navigateToChanged --templateMetricsHints --templateMetrics --watch --port 1313
 @PHONY: dev-theme
 
 clean:
