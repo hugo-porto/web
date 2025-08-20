@@ -27,4 +27,10 @@ build: clean
 upgrade:
 	hugo mod get -u ./...
 	hugo mod tidy
+	npx ncu -u
+	npm install
 @PHONY: upgrade
+
+fmt:
+	npx taplo format
+@PHONY: fmt
