@@ -3,14 +3,14 @@
 .SILENT:
 
 lint:
-	markdownlint '**/*.md' -i node_modules
+	npx markdownlint --fix "**/*.md" -i node_modules
 @PHONY: lint
 
-dev: lint
+dev: lint clean
 	hugo server --buildDrafts --buildFuture --disableFastRender --noHTTPCache  --navigateToChanged --templateMetricsHints --templateMetrics --watch --port 1313
 @PHONY: dev
 
-dev-theme: lint
+dev-theme: lint clean
 	HUGO_MODULE_REPLACEMENTS="github.com/hugo-porto/theme->../../theme" hugo server --buildDrafts --buildFuture --disableFastRender --noHTTPCache  --navigateToChanged --templateMetricsHints --templateMetrics --watch --port 1313
 @PHONY: dev-theme
 
@@ -24,12 +24,12 @@ build: clean
 	hugo --gc --minify --cleanDestinationDir
 .PHONY: build
 
-upgrade:
+update:
 	hugo mod get -u ./...
 	hugo mod tidy
-	npx ncu -u
-	npm install
-@PHONY: upgrade
+	npx npm-check-updates -u
+	npm install --no-fund --no-audit --prefer-offline
+@PHONY: update
 
 fmt:
 	npx taplo format
