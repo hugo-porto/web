@@ -1,6 +1,6 @@
 {{/* Default data */}}
 {{ $text := "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consequatur, autem tempora provident nihil iste sint excepturi quasi asperiores. Vero itaque labore animi eveniet laboriosam? Dolore ea explicabo corrupti rerum exercitationem." }}
-{{ $image := "https://source.unsplash.com/800x450/?nature,water" }}
+{{ $image := "img/Model_Rosie_on_a_bed_-_In_Black_and_White_(14192377223).jpg" }}
 
 {{/* Custom data from configuration file */}}
 {{ with site.Data.sections.custom }}
@@ -9,6 +9,13 @@
   {{ end }}
   {{ with .image }}{{ $image = . }}{{ end }}
 {{ end }}
+
+{{ $res := resources.Get $image }}
+{{ if $res }}
+  {{ $image = ($res.Resize "500x").RelPermalink }}
+{{ end }}
+
+{{ printf "Image: %s" $image  }}
 
 
 <h2 class="text-center text-4xl md:text-5xl lg:text-7xl p-5 rounded-xl font-medium font-poppins text-gray-400">
