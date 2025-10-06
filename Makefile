@@ -28,7 +28,7 @@ update:
 	hugo mod get -u ./...
 	hugo mod tidy
 	npx npm-check-updates -u
-	npm install --no-fund --no-audit --prefer-offline
+	npm install --no-fund --no-audit
 @PHONY: update
 
 fmt:
