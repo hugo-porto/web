@@ -9,6 +9,7 @@ title        = 'My New Hugo Site'
 
   [params.author]
     name = 'John Doe'
+    avatar = 'img/profile_pic.png'
 
 
 # Add theme using Hugo modules

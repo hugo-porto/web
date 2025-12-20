@@ -1,4 +1,4 @@
-title    = "hugo-porto"
+title    = "Georgi"
 logoLink = "http://example.com/"
 
 [[menu]]
@@ -8,15 +8,9 @@ logoLink = "http://example.com/"
   target      = "_self"
 
 [[menu]]
-  text        = "Posts"
-  description = "Read my latest posts"
-  link        = "/posts"
-  target      = "_self"
-
-[[menu]]
-  text        = "Tags"
-  description = "Browse tags"
-  link        = "/tags"
+  text        = "Projects"
+  description = "View my projects and visualizations"
+  link        = "/projects"
   target      = "_self"
 
 [button]
