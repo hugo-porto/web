@@ -11,9 +11,10 @@ github: "https://github.com/gtrevnenski/art-display-predictor"
 Analysis of public data from the Metropolitan Museum of Art and a gradient boosting algorithm predicting which art piece is on view  
 
 This project uses data made available by The Metropolitan Museum of Art under the Open Access program.  
-  
+
 MET Open Access Dataset: https://github.com/metmuseum/openaccess  
 
+{{< dashboard >}}
 <h2 style="display: none;">Dataset Analysis</h2>
 
 <div class="data-analysis">
@@ -56,13 +57,16 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
 
 <div class="top-departments" id="topDepartments"></div>
 </div>
+{{< /dashboard >}}
 
+{{< dashboard >}}
 <h2 style="display: none;">Model Performance Dashboard</h2>
 
 <div class="model-dashboard">
 <div class="metrics-grid" id="metricsGrid"></div>
 <div class="update-info" id="updateInfo">Loading...</div>
 </div>
+{{< /dashboard >}}
 
 <h2 style="display: none;">Try the Model</h2>
 
@@ -794,4 +798,3 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
   
   loadFeatureRanges();
 </script>
-

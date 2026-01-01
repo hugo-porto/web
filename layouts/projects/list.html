@@ -1,5 +1,72 @@
 {{ define "main" }}
 <style>
+
+  .project-image {
+    box-sizing: border-box;   /* important */
+  }
+
+  .project-dashboard {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;         /* prevents “spilling” into the gap */
+  }
+
+  .project-dashboard .data-analysis,
+  .project-dashboard .model-dashboard {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .project-dashboard .stats-summary,
+  .project-dashboard .metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+    /* Remove the OUTER card look for dashboards (prevents double frame) */
+  .project-dashboard {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    overflow: visible !important; /* let inner card handle rounding */
+    padding: 0 !important;
+  }
+
+  /* Prevent big numbers from overflowing */
+  .project-dashboard .metric-value {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .project-dashboard .metrics-grid {
+    grid-template-columns: repeat(2, 1fr); /* from 3 columns to 2 */
+  }
+
+    /* Scale the whole dashboard proportionally */
+  .project-dashboard {
+    zoom: 0.78;            /* try 0.85–0.95 */
+    transform-origin: top center;
+  }
+
+
+
+  /* Force dashboard content to respect column width
+  .project-dashboard,
+  .project-dashboard * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .project-dashboard .stats-summary,
+  .project-dashboard .metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  } */
+
+
+
   .project-section {
     padding: 4rem 0;
     position: relative;
@@ -17,7 +84,6 @@
     align-items: start;
   }
   
-  
   .project-images {
     display: flex;
     flex-direction: column;
@@ -29,6 +95,10 @@
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    /* Added: makes embeds behave like images inside the “card” */
+    overflow: hidden;
+    background: white;
   }
   
   .project-image:hover {
@@ -123,8 +193,12 @@
           </div>
           {{ end }}
 
+          {{/* Remove ALL dashboard blocks from the left column */}}
+          {{ $raw := $page.RawContent }}
+          {{ $left := $raw | replaceRE `(?s){{<\s*dashboard\s*>}}.*?{{<\s*/dashboard\s*>}}` "" }}
+
           <div class="prose prose-lg max-w-none text-gray-700 mb-8">
-            {{ $page.Content }}
+            {{ $left | markdownify }}
           </div>
 
           {{ if $page.Params.github }}
@@ -138,8 +212,21 @@
           {{ end }}
         </div>
 
-        <!-- Images -->
+        <!-- Dashboards + Images -->
         <div class="project-images">
+
+          {{/* Render ALL dashboard blocks on the right (stacked) */}}
+          {{ $dashBlocks := findRE `(?s){{<\s*dashboard\s*>}}.*?{{<\s*/dashboard\s*>}}` $raw }}
+          {{ range $dashBlocks }}
+            {{ $dashInner := . | replaceRE `(?s)^{{<\s*dashboard\s*>}}` "" | replaceRE `(?s){{<\s*/dashboard\s*>}}$` "" }}
+            <div class="project-image project-dashboard">
+              {{ $dashInner | markdownify }}
+            </div>
+          {{ end }}
+          
+        
+
+
           {{ if $page.Params.images }}
             {{ range $imgIndex, $imgName := $page.Params.images }}
               {{ $imgResource := $page.Resources.GetMatch $imgName }}
@@ -237,4 +324,3 @@
   updateActiveProject();
 </script>
 {{ end }}
-
