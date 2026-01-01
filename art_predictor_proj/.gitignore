@@ -1,0 +1,13 @@
+# Generated output files
+output/
+
+# Downloaded model
+*.cbm
+
+# Downloaded data
+data/
+
+# Python cache
+__pycache__/
+*.pyc
+

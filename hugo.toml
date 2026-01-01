@@ -1,14 +1,15 @@
 baseURL      = 'https://hugo-porto.netlify.app/'
 languageCode = 'en-us'
-title        = 'My New Hugo Site'
+title        = 'Georgi Trevnenski'
 
 
 [params]
-  description = "John Doe personal website"
-  keywords    = "John Doe, personal website, blog, portfolio"
+  description = "Georgi Trevnenski personal website"
+  keywords    = "Georgi Trevnenski, personal website, portfolio"
+  favicon     = "img/favicon.png"
 
   [params.author]
-    name = 'John Doe'
+    name = 'Georgi Trevnenski'
     avatar = 'img/profile_pic.png'
 
 
@@ -16,3 +17,9 @@ title        = 'My New Hugo Site'
 [module]
   [[module.imports]]
     path = "github.com/hugo-porto/theme"
+
+# Enable unsafe HTML in markdown for inline scripts and styles
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

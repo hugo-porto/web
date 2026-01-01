@@ -1,5 +1,6 @@
 title    = "Georgi"
-logoLink = "http://example.com/"
+logo     = "img/favicon.png"
+logoLink = "/"
 
 [[menu]]
   text        = "Home"

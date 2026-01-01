@@ -1,67 +1,42 @@
 {{ define "main" }}
 <style>
-  /* Hide scrollbar but keep functionality */
-  html {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-  }
-  
-  html::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
-  
   .project-section {
-    /* Height based on number of images - each image gets viewport height */
     padding: 4rem 0;
     position: relative;
+    border-bottom: 1px solid rgba(229, 231, 235, 0.8);
   }
   
-  .project-sticky-container {
-    position: sticky;
-    top: 100px;
-    height: calc(100vh - 200px);
-    display: flex;
+  .project-section:last-of-type {
+    border-bottom: none;
+  }
+  
+  .project-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 3rem;
-    padding: 2rem;
-    transition: all 0.3s ease-out;
+    align-items: start;
   }
   
-  .project-content {
-    flex: 1;
-    max-width: 50%;
-    overflow-y: auto;
-    padding-right: 2rem;
-  }
   
   .project-images {
-    flex: 1;
-    position: relative;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 1000px;
+    flex-direction: column;
+    gap: 1.5rem;
   }
   
-  .image-stack {
-    position: relative;
+  .project-image {
     width: 100%;
-    height: 80%;
-  }
-  
-  .carousel-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 600px;
     border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
-  /* Scroll indicator */
+  .project-image:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+  
+  /* Scroll indicator with labels */
   .scroll-indicator {
     position: fixed;
     right: 2rem;
@@ -69,8 +44,17 @@
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
     z-index: 50;
+  }
+  
+  .scroll-dot-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s;
   }
   
   .scroll-dot {
@@ -79,34 +63,36 @@
     border-radius: 50%;
     background: rgba(107, 114, 128, 0.3);
     transition: all 0.3s;
-    cursor: pointer;
+    flex-shrink: 0;
   }
   
-  .scroll-dot.active {
+  .scroll-dot-container.active .scroll-dot {
     background: rgba(107, 114, 128, 1);
     transform: scale(1.3);
   }
   
-  /* Image counter */
-  .image-counter {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    z-index: 10;
+  .scroll-dot-label {
+    color: rgba(107, 114, 128, 0.7);
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.3s;
   }
   
-  @media (max-width: 768px) {
-    .project-sticky-container {
-      flex-direction: column;
+  .scroll-dot-container.active .scroll-dot-label {
+    color: rgba(31, 41, 55, 1);
+    font-size: 1rem;
+    text-decoration: underline;
+    font-weight: 600;
+  }
+  
+  @media (max-width: 1024px) {
+    .project-container {
+      grid-template-columns: 1fr;
     }
-    .project-content {
-      max-width: 100%;
+    
+    .scroll-dot-label {
+      display: none;
     }
   }
 </style>
@@ -119,13 +105,9 @@
 
   {{ range $index, $page := .Pages }}
     {{ if not $page.IsHome }}
-    {{ $numImages := len $page.Params.images }}
-    {{ $sectionHeight := mul $numImages 100 }}
-    <section class="project-section" data-project-section data-project-index="{{ $index }}" 
-             style="min-height: {{ $sectionHeight }}vh;" 
-             data-num-images="{{ $numImages }}">
-      <div class="project-sticky-container">
-        <!-- Left: Content -->
+    <section class="project-section" id="project-{{ $index }}" data-project-section data-project-index="{{ $index }}" data-project-title="{{ $page.Title }}" data-nav-label="{{ if $page.Params.nav_label }}{{ $page.Params.nav_label }}{{ else }}{{ $page.Title }}{{ end }}">
+      <div class="project-container">
+        <!-- Content -->
         <div class="project-content">
           <h2 class="text-4xl md:text-5xl font-semibold text-gray-800 mb-4 font-poppins">{{ $page.Title }}</h2>
           
@@ -156,24 +138,17 @@
           {{ end }}
         </div>
 
-        <!-- Right: Image Carousel -->
+        <!-- Images -->
         <div class="project-images">
-          <div class="image-stack" data-image-carousel>
-            {{ if $page.Params.images }}
-              {{ range $imgIndex, $imgName := $page.Params.images }}
-                {{ $imgResource := $page.Resources.GetMatch $imgName }}
-                {{ if $imgResource }}
-                  <img src="{{ $imgResource.RelPermalink }}" alt="{{ $page.Title }} visualization {{ add $imgIndex 1 }}" 
-                       class="carousel-image" 
-                       data-image-index="{{ $imgIndex }}"
-                       data-total-images="{{ len $page.Params.images }}" />
-                {{ end }}
+          {{ if $page.Params.images }}
+            {{ range $imgIndex, $imgName := $page.Params.images }}
+              {{ $imgResource := $page.Resources.GetMatch $imgName }}
+              {{ if $imgResource }}
+                <img src="{{ $imgResource.RelPermalink }}" alt="{{ $page.Title }} visualization {{ add $imgIndex 1 }}" 
+                     class="project-image" />
               {{ end }}
-              <div class="image-counter">
-                <span class="current-image">1</span> / <span class="total-images">{{ len $page.Params.images }}</span>
-              </div>
             {{ end }}
-          </div>
+          {{ end }}
         </div>
       </div>
     </section>
@@ -188,131 +163,78 @@
   const projectSections = document.querySelectorAll('[data-project-section]');
   const indicator = document.getElementById('scroll-indicator');
   
-  // Create navigation dots
+  // Create navigation dots with labels
   projectSections.forEach((section, index) => {
+    const container = document.createElement('div');
+    container.className = 'scroll-dot-container';
+    
+    const label = document.createElement('div');
+    label.className = 'scroll-dot-label';
+    label.textContent = section.dataset.navLabel;
+    
     const dot = document.createElement('div');
     dot.className = 'scroll-dot';
-    dot.addEventListener('click', () => {
+    
+    container.appendChild(label);
+    container.appendChild(dot);
+    
+    container.addEventListener('click', () => {
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-    indicator.appendChild(dot);
+    
+    indicator.appendChild(container);
   });
   
-  function updateProjectAnimations() {
+  function updateActiveProject() {
     const windowHeight = window.innerHeight;
-    const dots = document.querySelectorAll('.scroll-dot');
+    const dotContainers = document.querySelectorAll('.scroll-dot-container');
+    
+    let activeIndex = 0;
+    let minDistance = Infinity;
     
     projectSections.forEach((section, sectionIndex) => {
       const rect = section.getBoundingClientRect();
       const sectionTop = rect.top;
       const sectionBottom = rect.bottom;
       const sectionHeight = rect.height;
-      const numImages = parseInt(section.dataset.numImages) || 1;
       
-      // Check if section is in view
-      const isInView = sectionTop < windowHeight && sectionBottom > 0;
-      
-      // Update active dot - section is active when its center is near viewport center
+      // Find which section is most centered in the viewport
       const sectionCenter = sectionTop + sectionHeight / 2;
       const viewportCenter = windowHeight / 2;
       const distanceFromCenter = Math.abs(sectionCenter - viewportCenter);
       
-      if (distanceFromCenter < sectionHeight / 2) {
-        dots.forEach(d => d.classList.remove('active'));
-        dots[sectionIndex].classList.add('active');
+      if (distanceFromCenter < minDistance && sectionTop < windowHeight && sectionBottom > 0) {
+        minDistance = distanceFromCenter;
+        activeIndex = sectionIndex;
       }
-      
-      if (isInView) {
-        // Calculate scroll progress through the section (0 = just entered, 1 = about to exit)
-        // This gives more precise control over image transitions
-        let scrollProgress = 0;
-        if (sectionTop > 0) {
-          // Section is below viewport top
-          scrollProgress = 0;
-        } else if (sectionBottom < windowHeight) {
-          // Section is above viewport bottom
-          scrollProgress = 1;
-        } else {
-          // Section is in viewport
-          scrollProgress = Math.abs(sectionTop) / (sectionHeight - windowHeight);
-        }
-        scrollProgress = Math.max(0, Math.min(1, scrollProgress));
-        
-        // Get images in this project
-        const carousel = section.querySelector('[data-image-carousel]');
-        if (carousel) {
-          const images = carousel.querySelectorAll('.carousel-image');
-          const counter = carousel.querySelector('.current-image');
-          const totalImages = images.length;
-          
-          if (totalImages > 0) {
-            // Determine which image should be active - divide scroll progress by number of images
-            // Add a small buffer so each image gets equal time
-            const rawIndex = scrollProgress * totalImages;
-            const activeIndex = Math.min(Math.floor(rawIndex), totalImages - 1);
-            
-            // Update counter
-            if (counter) {
-              counter.textContent = activeIndex + 1;
-            }
-            
-            // Update each image with smoother transitions
-            images.forEach((img, imgIndex) => {
-              const distanceFromActive = Math.abs(imgIndex - activeIndex);
-              
-              if (imgIndex === activeIndex) {
-                // Active image: full opacity, in front, centered
-                img.style.opacity = '1';
-                img.style.transform = 'translate(-50%, -50%) scale(1) translateZ(0px)';
-                img.style.zIndex = '10';
-              } else if (imgIndex < activeIndex) {
-                // Images before: stack to the left/back
-                const offset = (distanceFromActive * 20);
-                img.style.opacity = '0.3';
-                img.style.transform = `translate(calc(-50% - ${offset}px), -50%) scale(${0.9 - distanceFromActive * 0.05}) translateZ(-${distanceFromActive * 100}px) rotateY(10deg)`;
-                img.style.zIndex = String(10 - distanceFromActive);
-              } else {
-                // Images after: stack to the right/back
-                const offset = (distanceFromActive * 20);
-                img.style.opacity = '0.3';
-                img.style.transform = `translate(calc(-50% + ${offset}px), -50%) scale(${0.9 - distanceFromActive * 0.05}) translateZ(-${distanceFromActive * 100}px) rotateY(-10deg)`;
-                img.style.zIndex = String(10 - distanceFromActive);
-              }
-            });
-          }
-        }
-        
-        // Overall section fade in/out at edges - faster transitions
-        const container = section.querySelector('.project-sticky-container');
-        if (container) {
-          // Fade in very quickly at start (first 10% of scroll)
-          const fadeInProgress = Math.min(1, scrollProgress * 20);
-          // Fade out very quickly at end (last 10% of scroll)
-          const fadeOutProgress = Math.min(1, (1 - scrollProgress) * 10);
-          // Keep at full opacity for most of the scroll
-          const opacity = Math.min(fadeInProgress, fadeOutProgress);
-          container.style.opacity = Math.max(0.5, opacity);
-        }
+    });
+    
+    // Update active state
+    dotContainers.forEach((container, index) => {
+      if (index === activeIndex) {
+        container.classList.add('active');
+      } else {
+        container.classList.remove('active');
       }
     });
   }
   
-  // Update on scroll with requestAnimationFrame for smooth performance
+  // Update on scroll
   let ticking = false;
   window.addEventListener('scroll', () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
-        updateProjectAnimations();
+        updateActiveProject();
         ticking = false;
       });
       ticking = true;
     }
   });
   
-  window.addEventListener('resize', updateProjectAnimations);
+  window.addEventListener('resize', updateActiveProject);
   
   // Initial update
-  updateProjectAnimations();
+  updateActiveProject();
 </script>
 {{ end }}
 

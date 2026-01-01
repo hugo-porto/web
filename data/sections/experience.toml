@@ -1,28 +1,59 @@
+title = "Work Experience"
+
 # The list of companies
 [[company]]
-  name = "Company 1"
-  date = "2022 - present"
-  role = "Team Lead"
+  name = "Conpend"
+  date = "March 2025 - Present"
+  role = "Machine Learning Engineer"
   text = [
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam.",
+    "Conpend’s Trade AI is a Trade Finance solution that fully digitises paper document flows and automates routine document checks. It increases efficiency and accuracy while supporting strict regulatory and compliance requirements.",
+
+    "For this reason, ML approaches are used to classify documents and extract fields, tables, stamps and signatures.",
+
+    "As a full-time engineer I acquired full ownership of the ML projects and my responsibilities include:",
+    "- Researching and implementing NLP and Computer Vision algorithms and methodologies",
+    "- Designing and building machine learning systems for production environments",
+    "- Continuously evaluating and improving models to ensure accuracy and effectiveness",
+    "- Containerizing and integrating trained models into the application",
+
+    "Conpend serves a global client base of over 35 leading financial institutions. I have worked closely with major banks such as Commerzbank and UniCredit.",
+    "Technologies used: Python, PyTorch, Keras, Natural Language Processing (NLP), ZenML, Docker, C#, SQL"
   ]
 
 [[company]]
-  name = "Company 2"
-  date = "2020 - 2022"
-  role = "Backend Developer"
+  name = "Conpend"
+  date = "September 2023 - March 2025"
+  role = "Machine Learning Engineer"
   text = [
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam.",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Cras elementum ultrices diam.",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.",
+    "I started part-time at the company at 3 days a week next to my Master's studies, contributing to the same document classification and information extraction pipelines"
   ]
 
 [[company]]
-  name = "Company 3"
-  date = "2020"
-  role = "Software Engineer"
+  name = "Sensefinity"
+  date = "March 2022 - August 2022"
+  role = "Full-Stack Developer"
   text = [
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam.",
+    "Worked on a cloud-based microservices platform to monitor IoT sensors in supply chains.",
+    "Implemented geofencing functionality, allowing clients to define zones on a map and receive alerts",
+    "Technologies used: Go, React.js, Python, Kubernetes"
   ]
+
+[[company]]
+  name = "TJIP"
+  date = "July 2020 - September 2020"
+  role = "Junior Software Engineer"
+  text = [
+    "Contributed to the development of ABN AMRO’s online mortgage platform.",
+    "Developed backend features and integrated them with the frontend.",
+    "Implemented authentication using OpenID Connect.",
+    "Technologies used: C#, Vue.js, event sourcing, IdentityServer4, domain-driven design."
+  ]
+
+[[company]]
+  name = "TU Delft"
+  date = "Nov 2019 – May 2020; Jul 2020 – Sep 2020"
+  role = "Teaching Assistant"
+  text = [
+  "Responsible for the courses: Calculus, Web and Database Technologies, Information and Data Management.",
+  "Graded assignments and exams."
+]

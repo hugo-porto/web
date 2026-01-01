@@ -1,15 +1,35 @@
-# The list of education places and courses
-[[education]]
-  date  = "2024"
-  title = "Professional Course"
-  text  = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien fermentum tincidunt. Nullam nec purus nec purus fermentum tincidunt. Nullam nec purus nec purus fermentum tincidunt."
+title = "Education"
 
 [[education]]
-  date  = "2011 - 2014"
-  title = "Training Center"
-  text  = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien fermentum tincidunt. Nullam nec purus nec purus fermentum tincidunt. Nullam nec purus nec purus fermentum tincidunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+date  = "September 2022 – December 2024"
+title = "Delft University of Technology — M.Sc. Computer Science (Artificial Intelligence Technology Track)"
+text = [
+  "Master’s degree in Computer Science with a specialization in Artificial Intelligence.",
+  "Completed a special program in Bioinformatics.",
+  "Relevant coursework:",
+  "- Machine Learning",
+  "- Deep Learning",
+  "- Evolutionary Algorithms",
+  "- Introduction to Molecular Biology",
+  "- Machine Learning in Bioinformatics",
+]
 
 [[education]]
-  date  = "1990 - 1996"
-  title = "University"
-  text  = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien fermentum tincidunt. Nullam nec purus nec purus fermentum tincidunt."
+date  = "September 2018 – September 2021"
+title = "Delft University of Technology — B.Sc. Computer Science and Engineering"
+text = [
+  "Bachelor’s degree in Computer Science and Engineering.",
+  "Relevant coursework:",
+  "- Machine Learning (Python, NumPy, Pandas)",
+  "- Data Mining",
+  "- Algorithm Design",
+  "- Big Data Processing (Scala, Apache Spark, Apache Flink)",
+]
+
+[[education]]
+date  = "September 2021 – February 2022"
+title = "Nova FCT — Bachelor’s CSE Exchange"
+text = [
+  "A semester abroad in Lisbon.",
+  "Taking courses from their Master's program in Computer Science",
+]

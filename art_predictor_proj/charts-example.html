@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MET Art Display Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        #lastUpdated {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+        
+        .stats-banner {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            padding: 50px;
+        }
+        
+        .error {
+            background: #f44336;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 MET Art Display Analytics</h1>
+            <p id="lastUpdated">Loading...</p>
+        </header>
+        
+        <div id="loading" class="loading">Loading charts...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        
+        <!-- Key Statistics -->
+        <div class="stats-banner" id="statsBanner" style="display: none;">
+            <h2>Key Metrics</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="totalItems">-</div>
+                    <div class="stat-label">Total Artworks</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="onViewCount">-</div>
+                    <div class="stat-label">On Display</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="notOnViewCount">-</div>
+                    <div class="stat-label">In Storage</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="accuracy">-</div>
+                    <div class="stat-label">Model Accuracy</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts -->
+        <div class="charts-grid" id="chartsGrid" style="display: none;">
+            <div class="chart-card">
+                <h3>Collection Distribution</h3>
+                <div class="chart-container">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h3>Model Predictions</h3>
+                <div class="chart-container">
+                    <canvas id="errorChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h3>Top Departments</h3>
+                <div class="chart-container">
+                    <canvas id="departmentChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h3>Historical Timeline</h3>
+                <div class="chart-container">
+                    <canvas id="centuryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Load analysis data
+        async function loadAnalysisData() {
+            const response = await fetch('../output/analysis_stats.json');
+            return await response.json();
+        }
+
+        // Create distribution pie chart
+        function createDistributionPieChart(data) {
+            const ctx = document.getElementById('distributionChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['On View', 'Not On View'],
+                    datasets: [{
+                        data: [data.distribution.on_view, data.distribution.not_on_view],
+                        backgroundColor: ['#4CAF50', '#FF5722'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return `${context.label}: ${value.toLocaleString()} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create error chart
+        function createErrorChart(data) {
+            const ctx = document.getElementById('errorChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Correct', 'False Positives', 'False Negatives'],
+                    datasets: [{
+                        data: [
+                            data.errors.correct,
+                            data.errors.false_positives,
+                            data.errors.false_negatives
+                        ],
+                        backgroundColor: ['#4CAF50', '#FF9800', '#9C27B0'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        // Create department chart
+        function createDepartmentChart(data) {
+            const ctx = document.getElementById('departmentChart').getContext('2d');
+            const deptData = data.by_department
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 10);
+            
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: deptData.map(d => d.department),
+                    datasets: [{
+                        label: 'Items',
+                        data: deptData.map(d => d.count),
+                        backgroundColor: '#2196F3'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: { x: { beginAtZero: true } }
+                }
+            });
+        }
+
+        // Create century chart
+        function createCenturyChart(data) {
+            const ctx = document.getElementById('centuryChart').getContext('2d');
+            const centuryData = data.by_century.sort((a, b) => a.century - b.century);
+            
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: centuryData.map(d => {
+                        const c = d.century;
+                        return c < 0 ? `${Math.abs(c)} BCE` : `${c} CE`;
+                    }),
+                    datasets: [{
+                        label: 'Items',
+                        data: centuryData.map(d => d.count),
+                        borderColor: '#9C27B0',
+                        backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        // Initialize everything
+        async function init() {
+            try {
+                const data = await loadAnalysisData();
+                
+                // Update stats
+                document.getElementById('totalItems').textContent = data.total_items.toLocaleString();
+                document.getElementById('onViewCount').textContent = data.distribution.on_view.toLocaleString();
+                document.getElementById('notOnViewCount').textContent = data.distribution.not_on_view.toLocaleString();
+                document.getElementById('accuracy').textContent = (data.accuracy * 100).toFixed(1) + '%';
+                
+                const lastUpdated = new Date(data.last_updated);
+                document.getElementById('lastUpdated').textContent = 
+                    `Last updated: ${lastUpdated.toLocaleDateString('en-US', { 
+                        month: 'long', day: 'numeric', year: 'numeric' 
+                    })}`;
+                
+                // Create charts
+                createDistributionPieChart(data);
+                createErrorChart(data);
+                createDepartmentChart(data);
+                createCenturyChart(data);
+                
+                // Show content
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('statsBanner').style.display = 'block';
+                document.getElementById('chartsGrid').style.display = 'grid';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').textContent = 
+                    'Failed to load analytics data. Please try again later.';
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        // Load on page ready
+        init();
+    </script>
+</body>
+</html>
+

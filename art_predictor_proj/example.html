@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MET Display Predictor - Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #d32f2f;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #d32f2f;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #b71c1c;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+        .result.on-view {
+            background-color: #c8e6c9;
+            border-left: 4px solid #4caf50;
+        }
+        .result.not-on-view {
+            background-color: #ffccbc;
+            border-left: 4px solid #ff5722;
+        }
+        .result h2 {
+            margin-top: 0;
+        }
+        .similar-items {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        .similar-items h3 {
+            margin-top: 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .similar-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MET Art Display Predictor</h1>
+        <p>Predict whether an artwork is likely to be on display at the Metropolitan Museum of Art.</p>
+        
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="department">Department *</label>
+                <select id="department" required>
+                    <option value="">Select department...</option>
+                    <option value="European Paintings">European Paintings</option>
+                    <option value="American Decorative Arts">American Decorative Arts</option>
+                    <option value="Egyptian Art">Egyptian Art</option>
+                    <option value="Greek and Roman Art">Greek and Roman Art</option>
+                    <option value="Asian Art">Asian Art</option>
+                    <option value="Medieval Art">Medieval Art</option>
+                    <option value="Arms and Armor">Arms and Armor</option>
+                    <option value="Islamic Art">Islamic Art</option>
+                    <option value="Modern and Contemporary Art">Modern and Contemporary Art</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="objectBeginDate">Object Begin Date (e.g., 1850)</label>
+                <input type="number" id="objectBeginDate" placeholder="e.g., 1850">
+            </div>
+            
+            <div class="form-group">
+                <label for="objectEndDate">Object End Date (e.g., 1900)</label>
+                <input type="number" id="objectEndDate" placeholder="e.g., 1900">
+            </div>
+            
+            <div class="form-group">
+                <label for="classification">Classification</label>
+                <input type="text" id="classification" placeholder="e.g., Paintings">
+            </div>
+            
+            <div class="form-group">
+                <label for="medium">Medium</label>
+                <input type="text" id="medium" placeholder="e.g., Oil on canvas">
+            </div>
+            
+            <div class="form-group">
+                <label for="culture">Culture</label>
+                <input type="text" id="culture" placeholder="e.g., French">
+            </div>
+            
+            <button type="submit">Predict Display Status</button>
+        </form>
+        
+        <div id="loading" class="loading" style="display: none;">
+            Loading prediction model...
+        </div>
+        
+        <div id="result" class="result">
+            <h2 id="predictionText"></h2>
+            <p><strong>Probability:</strong> <span id="probability"></span></p>
+            <p><strong>Confidence:</strong> <span id="confidence"></span></p>
+            <p id="message"></p>
+            
+            <div class="similar-items">
+                <h3>Based on similar items:</h3>
+                <div id="similarItems"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import prediction utilities
+        import { 
+            calculateSimilarity, 
+            predictFromUserInput, 
+            loadPredictionsSample 
+        } from './prediction.js';
+
+        let sampleItems = [];
+
+        // Load sample items on page load
+        async function loadData() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+            
+            try {
+                // In production, this would be: '/data/predictions_sample.json'
+                // For this example, you need to generate the file first
+                sampleItems = await loadPredictionsSample('./output/predictions_sample.json');
+                console.log(`Loaded ${sampleItems.length} sample items`);
+                loading.style.display = 'none';
+            } catch (error) {
+                loading.innerHTML = 'Error loading data. Please run generate_website_data.py first.';
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('predictionForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (sampleItems.length === 0) {
+                alert('Data not loaded yet. Please wait...');
+                return;
+            }
+            
+            // Get form values
+            const userInput = {
+                department: document.getElementById('department').value,
+                objectBeginDate: parseInt(document.getElementById('objectBeginDate').value) || null,
+                objectEndDate: parseInt(document.getElementById('objectEndDate').value) || null,
+                classification: document.getElementById('classification').value || null,
+                medium: document.getElementById('medium').value || null,
+                culture: document.getElementById('culture').value || null,
+            };
+            
+            // Make prediction
+            const result = predictFromUserInput(userInput, sampleItems, 5);
+            
+            // Display result
+            displayResult(result);
+        });
+
+        function displayResult(result) {
+            const resultDiv = document.getElementById('result');
+            const predictionText = document.getElementById('predictionText');
+            const probability = document.getElementById('probability');
+            const confidence = document.getElementById('confidence');
+            const message = document.getElementById('message');
+            const similarItems = document.getElementById('similarItems');
+            
+            // Update text
+            predictionText.textContent = result.prediction === 'on-view' 
+                ? '✓ Likely ON VIEW' 
+                : '✗ Likely NOT on View';
+            
+            probability.textContent = `${(result.probability * 100).toFixed(1)}%`;
+            confidence.textContent = result.confidence.toUpperCase();
+            message.textContent = result.message;
+            
+            // Update similar items
+            similarItems.innerHTML = result.similarItems.map(item => `
+                <div class="similar-item">
+                    <strong>${item.title}</strong> (${item.department})<br>
+                    Similarity: ${item.similarity}, Prediction: ${item.probability}
+                </div>
+            `).join('');
+            
+            // Show result with appropriate styling
+            resultDiv.className = 'result ' + result.prediction;
+            resultDiv.style.display = 'block';
+            
+            // Scroll to result
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Load data on page load
+        loadData();
+    </script>
+</body>
+</html>
+

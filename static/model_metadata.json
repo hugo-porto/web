@@ -1,0 +1,136 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-29T16:49:02.386773",
+  "model_type": "CatBoost Classifier",
+  "num_features": 1026,
+  "metrics": {
+    "accuracy": 0.963067245357653,
+    "precision": 0.8214197071233557,
+    "recall": 0.8411488117931122,
+    "f1_score": 0.8311672003516042,
+    "auc_roc": 0.9852976034827026,
+    "auc_pr": 0.9037717709642252
+  },
+  "top_features": [
+    {
+      "name": "objectEndDate",
+      "importance": 7.488980288138236
+    },
+    {
+      "name": "objectBeginDate",
+      "importance": 4.2865552535863936
+    },
+    {
+      "name": "emb_925",
+      "importance": 1.001548852846945
+    },
+    {
+      "name": "emb_161",
+      "importance": 0.9592205879440319
+    },
+    {
+      "name": "emb_239",
+      "importance": 0.953607607171146
+    },
+    {
+      "name": "emb_481",
+      "importance": 0.9283216912003145
+    },
+    {
+      "name": "emb_640",
+      "importance": 0.9038656923774167
+    },
+    {
+      "name": "emb_313",
+      "importance": 0.886934613329033
+    },
+    {
+      "name": "emb_792",
+      "importance": 0.8329992693636633
+    },
+    {
+      "name": "emb_332",
+      "importance": 0.7351731759050089
+    },
+    {
+      "name": "emb_418",
+      "importance": 0.7288912164035436
+    },
+    {
+      "name": "emb_202",
+      "importance": 0.600691929167629
+    },
+    {
+      "name": "emb_333",
+      "importance": 0.5736676589012856
+    },
+    {
+      "name": "emb_488",
+      "importance": 0.5574482434086625
+    },
+    {
+      "name": "emb_118",
+      "importance": 0.5397148039184144
+    },
+    {
+      "name": "emb_830",
+      "importance": 0.5243625068155463
+    },
+    {
+      "name": "emb_966",
+      "importance": 0.4889850257782507
+    },
+    {
+      "name": "emb_675",
+      "importance": 0.47946845031967084
+    },
+    {
+      "name": "emb_334",
+      "importance": 0.43105434319925534
+    },
+    {
+      "name": "emb_30",
+      "importance": 0.42918987418161475
+    },
+    {
+      "name": "emb_111",
+      "importance": 0.42412825367802753
+    },
+    {
+      "name": "emb_870",
+      "importance": 0.4153960717081352
+    },
+    {
+      "name": "emb_873",
+      "importance": 0.40625195025409305
+    },
+    {
+      "name": "emb_644",
+      "importance": 0.3998733894720797
+    },
+    {
+      "name": "emb_341",
+      "importance": 0.3995588367187108
+    },
+    {
+      "name": "emb_39",
+      "importance": 0.39736472430613695
+    },
+    {
+      "name": "emb_668",
+      "importance": 0.39704417794440483
+    },
+    {
+      "name": "emb_303",
+      "importance": 0.3963634171619341
+    },
+    {
+      "name": "emb_868",
+      "importance": 0.39531854328124405
+    },
+    {
+      "name": "emb_611",
+      "importance": 0.39453589513816195
+    }
+  ]
+}
