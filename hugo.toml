@@ -1,4 +1,4 @@
-baseURL      = 'https://gtrevnenski.github.io/georgi-trevnenski.github.io/'
+baseURL      = 'https://georgi-trevnenski.dev/'
 languageCode = 'en-us'
 title        = 'Georgi Trevnenski'
 canonifyURLs = true
