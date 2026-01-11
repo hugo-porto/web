@@ -2,6 +2,20 @@
 //   background-color: #fff0f0
 // }
 
+// Navbar logo size - only target header/nav images, not profile pic
+header img:not(.profile-avatar),
+nav img,
+.navbar img,
+header a[href="/"] img {
+  width: 68px !important;
+  height: 68px !important;
+  min-width: 68px !important;
+  min-height: 68px !important;
+  max-width: 68px !important;
+  max-height: 68px !important;
+  object-fit: contain !important;
+}
+
 // Projects page styling
 .prose {
   img {

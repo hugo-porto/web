@@ -7,9 +7,7 @@ description: "Modality-fusion strategies for a transformer predicting enzyme-sub
 tags: ["Bioinformatics", "Deep Learning", "Modality Fusion"]
 github: "https://github.com/gtrevnenski/MuMoTEn"
 images:
-  - "mcc_with_histogram_and_ratios.png"
   - "mcc_with_histogram_mutiplicative_normalized.png"
-  - "smiles_classification_counts_comparison.png"
 ---
 
 <style>
