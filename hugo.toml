@@ -1,4 +1,4 @@
-baseURL      = 'https://hugo-porto.netlify.app/'
+baseURL      = 'https://georgi-trevnenski.dev/'
 languageCode = 'en-us'
 title        = 'Georgi Trevnenski'
 
@@ -23,3 +23,7 @@ title        = 'Georgi Trevnenski'
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+
+baseURL = "https://georgi-trevnenski.dev/"
+languageCode = "en-us"
+title = "Georgi Trevnenski"
