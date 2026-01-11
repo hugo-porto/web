@@ -4,7 +4,7 @@
 
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
 
-{{/* Removed hardcoded /css/tailwind.css because it breaks on GitHub Pages project sites. The theme's compiled styles are included via head/styles.html below. */}}
+<link rel="stylesheet" href="{{ "css/tailwind.css" | relURL }}" />
 
 {{ partial "head/fonts.html" . }}
 {{ partial "head/meta.html" . }}
