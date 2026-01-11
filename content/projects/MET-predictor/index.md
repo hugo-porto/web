@@ -554,10 +554,11 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
 <script>
   // Base-aware asset URLs for GitHub Pages subpath deployments (no Hugo templating to avoid literal braces)
   const SITE_BASE = (() => {
-    const { origin, pathname } = window.location;
-    // Strip everything after /projects/... to get the site root, preserving the GH Pages subpath
-    const cleaned = pathname.replace(/projects\\/.*$/, "");
-    return new URL(cleaned || "/", origin).toString();
+    const url = new URL(window.location.href);
+    const path = url.pathname;
+    const idx = path.indexOf('/projects/');
+    const basePath = idx >= 0 ? path.slice(0, idx + 1) : path;
+    return `${url.origin}${basePath || '/'}`;
   })();
   const ANALYSIS_URL = new URL("analysis_stats.json", SITE_BASE).toString();
   const METRICS_URL = new URL("model_metadata.json", SITE_BASE).toString();
