@@ -33,6 +33,14 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Download Hugo modules
+        run: hugo mod get
+
       - name: Build
         run: |
           hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
