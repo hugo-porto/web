@@ -552,10 +552,15 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
 </style>
 
 <script>
+  // Base-aware asset URLs for GitHub Pages subpath deployments
+  const ANALYSIS_URL = "{{ \"analysis_stats.json\" | relURL }}";
+  const METRICS_URL = "{{ \"model_metadata.json\" | relURL }}";
+  const FEATURES_URL = "{{ \"feature_ranges.json\" | relURL }}";
+
   // Load dataset analysis
   async function loadDataAnalysis() {
     try {
-      const response = await fetch('/analysis_stats.json');
+      const response = await fetch(ANALYSIS_URL);
       const data = await response.json();
       
       // Update summary stats
@@ -599,7 +604,7 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
   // Load model metrics
   async function loadMetrics() {
     try {
-      const response = await fetch('/model_metadata.json');
+      const response = await fetch(METRICS_URL);
       const data = await response.json();
       
       const metrics = [
@@ -636,7 +641,7 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
   
   async function loadFeatureRanges() {
     try {
-      const response = await fetch('/feature_ranges.json');
+      const response = await fetch(FEATURES_URL);
       featureRanges = await response.json();
       setupDropdowns();
     } catch (error) {
