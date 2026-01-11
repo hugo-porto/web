@@ -1,0 +1,15 @@
+<meta charset="utf-8" />
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport" />
+
+<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
+
+{{/* Removed hardcoded /css/tailwind.css because it breaks on GitHub Pages project sites. The theme's compiled styles are included via head/styles.html below. */}}
+
+{{ partial "head/fonts.html" . }}
+{{ partial "head/meta.html" . }}
+{{ partial "head/favicon.html" . }}
+{{ partial "head/scripts.html" . }}
+{{ partial "head/styles.html" . }}
+
+{{ template "_internal/google_analytics.html" . }}
