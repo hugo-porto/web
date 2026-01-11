@@ -43,7 +43,7 @@ jobs:
 
       - name: Build
         run: |
-          hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+          hugo --minify
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
