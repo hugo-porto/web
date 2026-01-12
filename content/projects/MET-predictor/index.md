@@ -54,6 +54,10 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
 </div>
 </div>
 </div>
+<div class="updated-since-retrain">
+<div class="updated-value" id="updatedSinceRetrain">Loading...</div>
+<div class="updated-label" id="updatedSinceRetrainPct">Updated since last retrain</div>
+</div>
 <div class="update-info" id="analysisUpdateInfo">Last updated: Loading...</div>
 </div>
 {{< /dashboard >}}
@@ -155,7 +159,7 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
   
   .stats-summary {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
   }
@@ -246,6 +250,27 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
   .not-on-view-color {
     background: linear-gradient(135deg, #6b7280, #4b5563);
   }
+
+.updated-since-retrain {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  text-align: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.updated-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.updated-label {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 0.35rem;
+}
   
   .prediction-form-container {
     background: #ffffff;
@@ -548,6 +573,14 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
       document.getElementById('notOnViewBar').style.width = notOnViewPct + '%';
       document.getElementById('onViewLabel').textContent = onViewPct.toFixed(1) + '%';
       document.getElementById('notOnViewLabel').textContent = notOnViewPct.toFixed(1) + '%';
+      
+      // Updated since last retrain
+      const updatedCount = data.updated_since_retrain?.count ?? 0;
+      const updatedPct = data.updated_since_retrain?.percentage ?? 0;
+      const retrainDate = data.updated_since_retrain?.last_retrain_date || '2025-10-19';
+      document.getElementById('updatedSinceRetrain').textContent = updatedCount.toLocaleString();
+      document.getElementById('updatedSinceRetrainPct').textContent =
+        `${updatedPct.toFixed(2)}% since retrain (${retrainDate})`;
       
       const analysisUpdated = new Date(data.last_updated || '2025-10-19');
       document.getElementById('analysisUpdateInfo').textContent =

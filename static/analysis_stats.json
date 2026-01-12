@@ -8,6 +8,11 @@
     "on_view_percentage": 10.80832741020015,
     "not_on_view_percentage": 89.19167258979985
   },
+  "updated_since_retrain": {
+    "count": 0,
+    "percentage": 0.0,
+    "last_retrain_date": "2025-10-19"
+  },
   "by_department": [
     {
       "department": "Ancient Near Eastern Art",
