@@ -54,8 +54,7 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
 </div>
 </div>
 </div>
-
-<div class="top-departments" id="topDepartments"></div>
+<div class="update-info" id="analysisUpdateInfo">Last updated: Loading...</div>
 </div>
 {{< /dashboard >}}
 
@@ -246,40 +245,6 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
   
   .not-on-view-color {
     background: linear-gradient(135deg, #6b7280, #4b5563);
-  }
-  
-  .top-departments {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid #e5e7eb;
-  }
-  
-  .dept-header {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-  
-  .dept-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    background: #f9fafb;
-    border-radius: 6px;
-  }
-  
-  .dept-name {
-    font-weight: 500;
-    color: #374151;
-  }
-  
-  .dept-count {
-    font-weight: 600;
-    color: #6b7280;
   }
   
   .prediction-form-container {
@@ -584,22 +549,9 @@ MET Open Access Dataset: https://github.com/metmuseum/openaccess
       document.getElementById('onViewLabel').textContent = onViewPct.toFixed(1) + '%';
       document.getElementById('notOnViewLabel').textContent = notOnViewPct.toFixed(1) + '%';
       
-      // Show top 5 departments
-      const topDepts = data.by_department
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 5);
-      
-      const deptHTML = `
-        <div class="dept-header">Top 5 Departments by Collection Size</div>
-        ${topDepts.map(dept => `
-          <div class="dept-item">
-            <span class="dept-name">${dept.department}</span>
-            <span class="dept-count">${dept.count.toLocaleString()} items</span>
-          </div>
-        `).join('')}
-      `;
-      
-      document.getElementById('topDepartments').innerHTML = deptHTML;
+      const analysisUpdated = new Date(data.last_updated || '2025-10-19');
+      document.getElementById('analysisUpdateInfo').textContent =
+        `Last updated: ${analysisUpdated.toLocaleDateString()}`;
       
     } catch (error) {
       console.error('Failed to load data analysis:', error);
