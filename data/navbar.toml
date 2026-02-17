@@ -24,3 +24,6 @@ logoLink = "http://example.com/"
   text    = "Get my CV"
   link    = "files/cv.pdf"
   target  = "_blank"
+
+[themeToggle]
+  enabled = true
